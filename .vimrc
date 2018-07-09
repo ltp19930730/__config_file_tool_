@@ -1,79 +1,137 @@
-" VIM Configuration File
-" Description: Optimized for C/C++ development, but useful also for other things.
-" Author: Gerhard Gappmeier
-"
+"字符编码
+"vim编码设置为utf-8,支持中文输入
+set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
+set encoding=utf-8
+set langmenu=zh_CN.utf-8
 
-" set UTF-8 encoding
-set enc=utf-8
-set fenc=utf-8
-set termencoding=utf-8
-" disable vi compatibility (emulation of old bugs)
+"语法和缩进
+"设定vim与vi不兼容
 set nocompatible
-
-" use indentation of previous line
+"自动缩进，即为新行自动添加与当前行同等的缩进
 set autoindent
-
-" use intelligent indentation for C
-set smartindent
-" configure tabwidth and insert spaces instead of tabs
-set tabstop=4        " tab width is 4 spaces
-set shiftwidth=4     " indent also with 4 spaces
-set expandtab        " expand tabs to spaces
-" wrap lines at 120 chars. 80 is somewaht antiquated with nowadays displays.
-set textwidth=120
-" turn syntax highlighting on
-set t_Co=256
-syntax on
-" colorscheme wombat256
-" turn line numbers on
-set number
-" highlight matching braces
+"类似C语言程序的缩进
+set cindent
 set showmatch
-" intelligent comments
-set comments=sl:/*,mb:\ *,elx:\ */
+"检索时忽略大小写
+set ignorecase
+set hlsearch
+"显示行号
+set nu
+filetype plugin indent on
 
-" Install OmniCppComplete like described on http://vim.wikia.com/wiki/C++_code_completion
-" This offers intelligent C++ completion when typing ‘.’ ‘->’ or <C-o>
-" Load standard tag files
-set tags+=~/.vim/tags/cpp
-set tags+=~/.vim/tags/gl
-set tags+=~/.vim/tags/sdl
-set tags+=~/.vim/tags/qt4
+"tab相关设置
+"开启时，在行首按TAB将加入shiftwidth个空格，否则加入tabstop个空格。
+set smarttab
+"是将输入的TAB自动展开成空格。开启后要输入TAB，需要Ctrl-V<TAB>
+"set expandtab
+set tabstop=4
+"设定 << 和 >> 命令移动时的宽度为 4
+set shiftwidth=4
 
-" Install DoxygenToolkit from http://www.vim.org/scripts/script.php?script_id=987
-let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
+"显示 TAB 键
+set list
+set listchars=tab:>-,trail:-
 
-" Enhanced keyboard mappings
-"
-" in normal mode F2 will save the file
-nmap <F2> :w<CR>
-" in insert mode F2 will exit insert, save, enters insert again
-imap <F2> <ESC>:w<CR>i
-" switch between header/source with F4
-map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-" recreate tags file with F5
-map <F5> :!ctags -R –c++-kinds=+p –fields=+iaS –extra=+q .<CR>
-" create doxygen comment
-map <F6> :Dox<CR>
-" build using makeprg with <F7>
-map <F7> :make<CR>
-" build using makeprg with <S-F7>
-map <S-F7> :make clean all<CR>
-" goto definition with F12
-map <F12> <C-]>
-" in diff mode we use the spell check keys for merging
-if &diff
-  ” diff settings
-  map <M-Down> ]c
-  map <M-Up> [c
-  map <M-Left> do
-  map <M-Right> dp
-  map <F9> :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
-else
-  " spell settings
-  :setlocal spell spelllang=en
-  " set the spellfile - folders must exist
-  set spellfile=~/.vim/spellfile.add
-  map <M-Down> ]s
-  map <M-Up> [s
-endif
+"颜色方案
+set t_Co=256
+"使用molokai 配色方案
+colorscheme molokai
+"为光标所在行加下划线,molokai配色下为高亮一行
+set cursorline
+hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+set cursorcolumn
+hi Cursorcolumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+"语法高亮
+syntax on
+
+"插件设置
+"pathogen settings
+"启用pathogen进行插件管理
+execute pathogen#infect()
+
+"tagbar settings
+"ctrl+t to open tarbar
+nmap <C-T> :TagbarToggle<CR>
+
+let g:tagbar_width = 20
+"auto run tagbar when use vim
+"autocmd VimEnter * nested :call tagbar#autoopen(1)
+"tagbar window postion
+let g:tagbar_right = 1
+"let g:tagbar_left = 1
+
+"nerdtree settings
+"ctrl+n to open nerdtree
+nmap <C-N> :NERDTree<CR>
+"nerdtree window position 'left' or 'right'
+let NERDTreeWinPos = 'left'
+"nerdtree window Size
+let NERDTreeWinSize = 30
+let NERDTreeShowFiles = 1
+
+"airline setting
+"开启airline
+set laststatus=2
+"不检测行尾空格,trailing-white-space
+let g:airline#extensions#whitespace#enabled = 0
+"使用tab打开文件
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
+
+"Code folding
+"set foldmethod=syntax
+"代码块折叠
+autocmd FileType python set foldmethod=indent
+"autocmd FileType xml set foldmethod=indent
+"autocmd FileType dia set foldmethod=indent
+
+"command Model map for go
+"go 语言快捷键支持
+"gd 快速打开:GoDef，GoDef支持代码内跳转到指定函数
+"gr 快速执行:GoRun , 运行go程序
+au FileType go cnoremap gd :GoDef<CR>
+au FileType go cnoremap gr :GoRun<CR>
+
+let g:go_fmt_command = "goimports"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set cscopequickfix=c+,d+,e+,g+,i+,s+,t+,f+
+nmap <C-n> :cnext<CR>
+nmap <C-m> :cprev<CR>
+
+nmap <C-@>a :cs find a <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-@>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+"taglist
+let Tlist_Use_Right_Window = 1 
+map <silent> <F9> :TlistToggle<cr>
+
+"quickfix
+nnoremap <C-@>o :call QuickfixToggle()<cr>
+
+let g:quickfix_is_open = 0
+
+function! QuickfixToggle()
+    if g:quickfix_is_open
+        cexpr []
+        cclose
+        let g:quickfix_is_open = 0
+    else
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+
+"clipboard setting for gvim
+set guioptions+=a
