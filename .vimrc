@@ -135,3 +135,7 @@ endfunction
 
 "clipboard setting for gvim
 set guioptions+=a
+
+"set relativenumber
+set relativenumber
+
