@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/teslax/.ssh/ec2'
+let g:netrw_dirhist_2='/Users/teslax/Projects/Blog/themes/next/layout/_partials/share'
+let g:netrw_dirhist_3='/Users/teslax/Projects/Blog/source'
+let g:netrw_dirhist_4='/Users/teslax/Projects/Blog'
+let g:netrw_dirhist_5='/Users/teslax/Projects/Blog/source'
+let g:netrw_dirhist_6='/Users/teslax/Projects/Blog'
+let g:netrw_dirhist_7='/Users/teslax/Projects/Blog/source/_posts'
+let g:netrw_dirhist_8='/Users/teslax'
